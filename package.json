@@ -1,0 +1,54 @@
+{
+  "name": "re-git",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "./",
+  "main": "src/start.js",
+  "build": {
+    "appId": "myApp",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "category": "your.app.category.type",
+      "iconUrl": "path-to-icon.png"
+    },
+    "mac": {
+      "category": "your.app.category.type",
+      "iconUrl": "path-to-icon.png"
+    }
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "@testing-library/user-event": "^7.2.1",
+    "electron": "^7.1.7",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.3.0"
+  },
+  "scripts": {
+    "start":  "electron .",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "electron-builder": "^21.2.0"
+  }
+}
