@@ -1,68 +1,122 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## React + Electron
+Questo è il boilerplate completato, tuttavia vi consiglio di seguire tutti i passaggi che vi ho elencato così da riuscire a creare una vostra app.
 
-## Available Scripts
+### Prerequisiti
+- nodejs
+- npm
 
-In the project directory, you can run:
+Installando nodejs dovreste già avere npm. Per controllare basta provare a scrivere in console:
+`node -v` e `npm -v`. Questi comandi dovrebbero ritornare le versioni di nodejs e npm.
 
-### `npm start`
+### Creare un progetto React
+Per prima cosa creare un progetto vuoto di React con il primo comando, il terzo comando servirà a far partire la vostra web app su un server localhost. (dovrebbe aprirsi una pagina web con indirizzo localhost:xxxx dove xxxx è la porta).
+```
+npx create-react-app nome-della-vostra-app
+cd nome-della-vostra-app
+npm start
+```
+Ricordate di chiudere la vostra app prima di installare le dipendenze, se avete fatto `npm start` potete chiuderla con CTRL+C quando siete nella console.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Installare dipendenze
+Ricordatevi per prima cosa di essere nella cartella dell'applicazione appena creata. In questo esempio: *nome-della-vostra-app*.
+- Installate electron:
+```
+npm install electron
+```
+- Installate electron-builder (serve per impacchettare e buildare la vostra app, -D è un alias per --save-dev quindi vi salva electron-builder come una dipendenza per i developers)
+```
+npm i -D electron-builder
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- Installare electron-is-dev (serve per far capire se l'app viene lanciata in development o production)
+```
+npm install electron-is-dev
+```
 
-### `npm test`
+### Configurazione
+Ora aprite il file *package.json* e modificatelo aggiungendo, dopo `"private": true,`:
+```
+"homepage": "./",
+"main": "src/start.js",
+"build": {
+    "appId": "some.id.ofyours",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "category": "your.app.category.type",
+      "iconUrl": "path-to-icon.png"
+    },
+    "mac": {
+      "category": "your.app.category.type",
+      "iconUrl": "path-to-icon.png"
+    }
+  },
+```
+e 
+`"electron": "electron .",` come primo elemento nell'oggetto json "scripts" in modo da ottenere:
+```
+"scripts": {
+    "electron": "electron .",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+```
+### Creazione del file start.js
+Il file start.js server per dire a electron che cosa deve fare quando viene chiamato il comando: `npm run electron`, inseriamo il file start.js dentro la cartella src. Nella configurazione abbiamo già inserito il puntatore a questo file nell'attributo "main".
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+const electron = require('electron')
+const app = electron.app
+const path = require('path')
+const isDev = require('electron-is-dev')
+const BrowserWindow = electron.BrowserWindow
 
-### `npm run build`
+let mainWindow
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  })
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+  // ricordate di cambiare la porta dopo localhost se necessario
+  mainWindow.loadURL(
+    isDev
+      ? 'http://localhost:3000'
+      : `file://${path.join(__dirname, '../build/index.html')}`,
+  )
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  mainWindow.on('closed', () => {
+    mainWindow = null
+  })
+}
 
-### `npm run eject`
+app.on('ready', createWindow)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+app.on('activate', () => {
+  if (mainWindow === null) {
+    createWindow()
+  }
+})
+```
+### Conclusione
+Ora per far partire la vostra web app:
+```
+npm start
+```
+Questo comando vi aprirà un server nodejs nella porta xxxx, a questo punto aprite una nuova console, andate nella cartella della vostra applicazione e scrivete il comando:
+```
+npm run electron
+```

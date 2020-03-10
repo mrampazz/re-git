@@ -1,0 +1,77 @@
+@import 'imports';
+
+.sidebarButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    text-align: left;
+    color: $WHITE;
+    border: 0;
+    font-size: 1em;
+    margin: 0.2em;
+    padding: 0.3em;
+    cursor: pointer;
+    outline: none;
+    transition: all .2s ease-in-out;
+    &:hover {
+        color: white;
+    }
+}
+
+.simpleButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $BLUE;
+    color: $WHITE;
+    font-size: 1em;
+    margin: 0.2em;
+    padding: 0.3em;
+    width: 150px;
+    height: 20px;
+    border-radius: .3em;
+    border: none;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    &:hover {
+        color: white;
+    }
+}
+
+.simpleButtonDisabled {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $BLUE;
+    color: $WHITE;
+    font-size: 1em;
+    margin: 0.2em;
+    padding: 0.3em;
+    width: 150px;
+    height: 20px;
+    border-radius: .3em;
+    border: none;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    opacity: 0.5;
+}
+
+
+.customInput {
+    border: 0;
+    background: $WHITE;
+    padding: 0.5em;
+    width: 68%;
+    font-size: 1em;
+    margin-top: 20px;
+}
+
+.infoContainer {
+    width: 70%;
+    margin-top: 20px;
+}
+
+.customHeader {
+
+}
