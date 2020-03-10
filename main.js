@@ -25,9 +25,28 @@ function createWindow() {
   })
 };
 
-ipcMain.on('change-directory', (event) => {
+function selectPath(callback) {
   let options = { properties: ['openDirectory'] };
-  dialog.showOpenDialog(options).then(result => event.reply('folder-selected', result.filePaths));
+  dialog.showOpenDialog(options)
+    .then(result => {
+      console.log(result.filePaths);
+      callback(result.filePaths);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+ipcMain.on('clone', (event, arg) => {
+  const simpleGit = require('simple-git')(arg.path);
+  simpleGit.clone(arg.link, arg.path);
+  // event.reply('cloned');
+});
+
+ipcMain.on('change-directory', (event, arg) => {
+  selectPath((result) => {
+    event.reply("folder-selected", result);
+  });
 });
 
 app.on('ready', createWindow);

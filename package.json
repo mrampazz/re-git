@@ -31,7 +31,8 @@
     "react-chartjs-2": "^2.9.0",
     "react-d3-library": "^1.1.8",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "simple-git": "^1.131.0"
   },
   "scripts": {
     "electron": "electron .",

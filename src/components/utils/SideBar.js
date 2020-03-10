@@ -6,11 +6,12 @@ export default class SideBar extends React.Component {
         let buttonList = [
             {name: 'Clone a repo', value: 'clone'},
             {name: 'View diff', value: 'diff'},
-            {name: 'Repo visualiser', value: 'visualiser'}
+            {name: 'Repo visualiser', value: 'visualiser'},
+            {name: 'Project page', value: 'project'}
         ];
 
         const buttons = buttonList.map(item => (
-            <SideBarButton name={item.name} func={() => this.props.func(item.value)} />
+            <SideBarButton key={item.value} name={item.name} func={() => this.props.func(item.value)} />
         ));
 
         return (

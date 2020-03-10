@@ -1,10 +1,10 @@
 import React from 'react';
-import './App.css';
 import DiffViewer from './components/DiffViewer';
 import ClonePage from './components/ClonePage';
 import RepoVisualiser from './components/RepoVisualiser';
 import SideBar from './components/utils/SideBar';
 import './App.css';
+import ProjectPage from './components/ProjectPage';
 const { ipcRenderer } = window.require('electron');
 
 export default class App extends React.Component {
@@ -13,13 +13,33 @@ export default class App extends React.Component {
     this.state = {
       currentPage: 'clone',
       currentRepoLink: '',
-      isFolderChosen: false
+      currentFolderPath: '',
+      isProjectLoaded: false,
+      projectInfo: {
+        name: '',
+        link: '',
+        path: '',
+        author: ''
+      }
     };
   }
 
   handleClone = (e) => {
-    // send signal
-
+    ipcRenderer.send('clone', {
+      link: this.state.currentRepoLink,
+      path: this.state.currentFolderPath
+    });
+    ipcRenderer.on('cloned', () => {
+      this.setState({
+        projectInfo: {
+          name: 'name1',
+          link: this.state.currentRepoLink,
+          path: this.state.currentFolderPath,
+          author: 'author1'
+        },
+        currentPage: 'project'
+      })
+    }); 
   }
 
   handleChangePage = (page) => {
@@ -36,12 +56,13 @@ export default class App extends React.Component {
 
   handleChangeDirectory = (e) => {
     e.preventDefault();
-    ipcRenderer.send('change-directory', () => {
-      ipcRenderer.on('folder-selected', (arg) => {
-        console.log('bubba');
-        console.log(arg);
+    ipcRenderer.send('change-directory');
+    ipcRenderer.on('folder-selected', (event, arg) => {
+      this.setState({
+        currentFolderPath: arg[0]
       });
-    }); 
+      console.log(this.state);
+    });
   }
 
   render() {
@@ -50,10 +71,12 @@ export default class App extends React.Component {
       case 'clone':
         page = 
           <ClonePage 
-            value={this.state.currentRepoLink} 
+            currentRepoLink={this.state.currentRepoLink}
+            currentFolderPath={this.state.currentFolderPath}
             onChange={this.handleChangeRepoLink} 
-            buttonState={this.state.currentRepoLink && this.state.isFolderChosen ? 'enabled':'disabled'}
+            buttonState={this.state.currentRepoLink && this.state.currentFolderPath ? 'enabled':'disabled'}
             changeDirectory={this.handleChangeDirectory}
+            onClone={this.handleClone}
           />
         ;
         break;
@@ -62,6 +85,12 @@ export default class App extends React.Component {
         break;
       case 'visualiser':
         page = <RepoVisualiser />;
+        break;
+      case 'project':
+        page = 
+          <ProjectPage 
+            project={this.state.isProjectLoaded ? this.state.projectInfo : null}
+          />;
         break;
       default:
         page = <div> The page you are looking for is not here. </div>;
