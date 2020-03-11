@@ -24,6 +24,16 @@ export default class ClonePage extends React.Component {
                     state={this.props.buttonState} 
                     func={this.props.onClone}
                 />
+
+                {/* <input placeholder="insert username here!!"></input> */}
+                <button onClick={this.props.showUser}>console.log stuff about user</button>
+                {
+                    this.props.isUserLogged ?
+                    <button onClick={this.props.show}>Click me to console.log projects</button>
+                    : 
+                    <p>He's not logget bruv</p>
+                }
+
             </div>
         );
     }

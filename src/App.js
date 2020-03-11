@@ -5,7 +5,11 @@ import RepoVisualiser from './components/RepoVisualiser';
 import SideBar from './components/utils/SideBar';
 import './App.css';
 import ProjectPage from './components/ProjectPage';
+import * as axios from 'axios';
 const { ipcRenderer } = window.require('electron');
+
+const CLIENT_ID = "d58d36302139b6a46fef";
+const REDIRECT_URI = "http://localhost:3000/";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -14,32 +18,47 @@ export default class App extends React.Component {
       currentPage: 'clone',
       currentRepoLink: '',
       currentFolderPath: '',
-      isProjectLoaded: false,
-      projectInfo: {
-        name: '',
-        link: '',
-        path: '',
-        author: ''
-      }
+      isUserLogged: false,
+      username: ''
     };
   }
+
+  // componentDidMount() {
+  //   const code =
+  //     window.location.href.match(/\?code=(.*)/) &&
+  //     window.location.href.match(/\?code=(.*)/)[1];
+  //   console.log(code);
+  //   if (code) {
+  //     this.setState({
+  //       isUserLogged: true
+  //     });
+  //     fetch(`https://gitstar.herokuapp.com/authenticate/${code}`)
+  //       .then(response => response.json())
+  //       .then(({ token }) => {
+  //         this.setState({
+  //           token,
+  //           status: STATUS.FINISHED_LOADING
+  //         });
+  //       });
+  //   }
+  // }
 
   handleClone = (e) => {
     ipcRenderer.send('clone', {
       link: this.state.currentRepoLink,
       path: this.state.currentFolderPath
     });
-    ipcRenderer.on('cloned', () => {
-      this.setState({
-        projectInfo: {
-          name: 'name1',
-          link: this.state.currentRepoLink,
-          path: this.state.currentFolderPath,
-          author: 'author1'
-        },
-        currentPage: 'project'
-      })
-    }); 
+    // ipcRenderer.on('cloned', () => {
+    //   this.setState({
+    //     projectInfo: {
+    //       name: 'name1',
+    //       link: this.state.currentRepoLink,
+    //       path: this.state.currentFolderPath,
+    //       author: 'author1'
+    //     },
+    //     currentPage: 'project'
+    //   })
+    // }); 
   }
 
   handleChangePage = (page) => {
@@ -65,8 +84,22 @@ export default class App extends React.Component {
     });
   }
 
+  showUser = () => {
+    axios.get('https://api.github.com/users/mrampazz/repos')
+      .then(res => {
+        console.log(res);
+      })
+  }
+
   render() {
     let page = null;
+    let obj = {
+            name: 'name1',
+            link: this.state.currentRepoLink,
+            path: this.state.currentFolderPath,
+            author: 'author1'
+          }
+
     switch(this.state.currentPage) {
       case 'clone':
         page = 
@@ -77,6 +110,9 @@ export default class App extends React.Component {
             buttonState={this.state.currentRepoLink && this.state.currentFolderPath ? 'enabled':'disabled'}
             changeDirectory={this.handleChangeDirectory}
             onClone={this.handleClone}
+            isUserLogged={this.state.isUserLogged}
+            show={this.getRepos}
+            showUser={this.showUser}
           />
         ;
         break;
@@ -89,7 +125,7 @@ export default class App extends React.Component {
       case 'project':
         page = 
           <ProjectPage 
-            project={this.state.isProjectLoaded ? this.state.projectInfo : null}
+            project={obj}
           />;
         break;
       default:
@@ -98,7 +134,10 @@ export default class App extends React.Component {
     }
     return (
       <div className="appContainer">
-        <SideBar func={this.handleChangePage} />
+        <SideBar 
+          func={this.handleChangePage} 
+          login={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`}
+        />
         { page }
       </div>
     );

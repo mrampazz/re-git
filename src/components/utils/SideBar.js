@@ -16,6 +16,9 @@ export default class SideBar extends React.Component {
 
         return (
             <div className="sidebarContainer">
+                <a href={this.props.login}>
+                    Login with github  
+                </a>
                 {buttons}
             </div>
         );
