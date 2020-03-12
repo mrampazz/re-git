@@ -1,50 +1,62 @@
-import React from 'react';
-import DiffViewer from './components/DiffViewer';
-import ClonePage from './components/ClonePage';
-import RepoVisualiser from './components/RepoVisualiser';
-import SideBar from './components/utils/SideBar';
-import './App.css';
-import ProjectPage from './components/ProjectPage';
-import * as axios from 'axios';
-const { ipcRenderer } = window.require('electron');
+import React from "react";
+import DiffViewer from "./components/DiffViewer";
+import ClonePage from "./components/ClonePage";
+import RepoVisualiser from "./components/RepoVisualiser";
+import SideBar from "./components/utils/SideBar";
+import "./App.css";
+import ProjectPage from "./components/ProjectPage";
+import * as axios from "axios";
+const { ipcRenderer } = window.require("electron");
 
 const CLIENT_ID = "d58d36302139b6a46fef";
 const REDIRECT_URI = "http://localhost:3000/";
+
+// if (code) {
+//   axios.post('https://mramp.me/regit/server.php', {
+//     firstName: '',
+//     lastName: ''
+//   })
+//   .then(function (token) {
+//     console.log(token);
+//       this.setState({
+//         token: token,
+//         isUserLogged: true
+//       });
+//   });
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPage: 'clone',
-      currentRepoLink: '',
-      currentFolderPath: '',
+      currentPage: "clone",
+      currentRepoLink: "",
+      currentFolderPath: "",
       isUserLogged: false,
-      username: ''
+      username: "",
+      token: ""
     };
   }
 
-  // componentDidMount() {
-  //   const code =
-  //     window.location.href.match(/\?code=(.*)/) &&
-  //     window.location.href.match(/\?code=(.*)/)[1];
-  //   console.log(code);
-  //   if (code) {
-  //     this.setState({
-  //       isUserLogged: true
-  //     });
-  //     fetch(`https://gitstar.herokuapp.com/authenticate/${code}`)
-  //       .then(response => response.json())
-  //       .then(({ token }) => {
-  //         this.setState({
-  //           token,
-  //           status: STATUS.FINISHED_LOADING
-  //         });
-  //       });
-  //   }
-  // }
+  componentDidMount() {
+    let app = this;
+    const code =
+      window.location.href.match(/\?code=(.*)/) &&
+      window.location.href.match(/\?code=(.*)/)[1];
+    // give code to php & returns token
+    axios.get("http://mramp.me/regit/server.php?code=" + code)
+      .then(function(response) {
+        app.setState({
+          token: response.data
+        })
+        console.log(app.state);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 
-  handleClone = (e) => {
-    ipcRenderer.send('clone', {
+  handleClone = e => {
+    ipcRenderer.send("clone", {
       link: this.state.currentRepoLink,
       path: this.state.currentFolderPath
     });
@@ -58,75 +70,75 @@ export default class App extends React.Component {
     //     },
     //     currentPage: 'project'
     //   })
-    // }); 
-  }
+    // });
+  };
 
-  handleChangePage = (page) => {
+  handleChangePage = page => {
     this.setState({
       currentPage: page
     });
-  }
+  };
 
-  handleChangeRepoLink = (e) => {
+  handleChangeRepoLink = e => {
     this.setState({
       currentRepoLink: e.target.value
     });
-  }
+  };
 
-  handleChangeDirectory = (e) => {
+  handleChangeDirectory = e => {
     e.preventDefault();
-    ipcRenderer.send('change-directory');
-    ipcRenderer.on('folder-selected', (event, arg) => {
+    ipcRenderer.send("change-directory");
+    ipcRenderer.on("folder-selected", (event, arg) => {
       this.setState({
         currentFolderPath: arg[0]
       });
       console.log(this.state);
     });
-  }
+  };
 
   showUser = () => {
-    axios.get('https://api.github.com/users/mrampazz/repos')
-      .then(res => {
-        console.log(res);
-      })
-  }
+    axios.get("https://api.github.com/users/mrampazz/repos").then(res => {
+      console.log(res);
+    });
+  };
 
   render() {
     let page = null;
     let obj = {
-            name: 'name1',
-            link: this.state.currentRepoLink,
-            path: this.state.currentFolderPath,
-            author: 'author1'
-          }
+      name: "name1",
+      link: this.state.currentRepoLink,
+      path: this.state.currentFolderPath,
+      author: "author1"
+    };
 
-    switch(this.state.currentPage) {
-      case 'clone':
-        page = 
-          <ClonePage 
+    switch (this.state.currentPage) {
+      case "clone":
+        page = (
+          <ClonePage
             currentRepoLink={this.state.currentRepoLink}
             currentFolderPath={this.state.currentFolderPath}
-            onChange={this.handleChangeRepoLink} 
-            buttonState={this.state.currentRepoLink && this.state.currentFolderPath ? 'enabled':'disabled'}
+            onChange={this.handleChangeRepoLink}
+            buttonState={
+              this.state.currentRepoLink && this.state.currentFolderPath
+                ? "enabled"
+                : "disabled"
+            }
             changeDirectory={this.handleChangeDirectory}
             onClone={this.handleClone}
             isUserLogged={this.state.isUserLogged}
             show={this.getRepos}
             showUser={this.showUser}
           />
-        ;
+        );
         break;
-      case 'diff':
+      case "diff":
         page = <DiffViewer />;
         break;
-      case 'visualiser':
+      case "visualiser":
         page = <RepoVisualiser />;
         break;
-      case 'project':
-        page = 
-          <ProjectPage 
-            project={obj}
-          />;
+      case "project":
+        page = <ProjectPage project={obj} />;
         break;
       default:
         page = <div> The page you are looking for is not here. </div>;
@@ -134,11 +146,11 @@ export default class App extends React.Component {
     }
     return (
       <div className="appContainer">
-        <SideBar 
-          func={this.handleChangePage} 
+        <SideBar
+          func={this.handleChangePage}
           login={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`}
         />
-        { page }
+        {page}
       </div>
     );
   }
