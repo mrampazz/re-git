@@ -6,9 +6,8 @@ import SideBar from "./components/utils/SideBar";
 import ProjectPage from "./components/ProjectPage";
 import "./App.css";
 import * as axios from "axios";
-import blankUser from './assets/images/blank_user.png';
+import blankUser from "./assets/images/blank_user.png";
 const { ipcRenderer } = window.require("electron");
-
 
 const CLIENT_ID = "d58d36302139b6a46fef";
 const REDIRECT_URI = "http://localhost:3000/";
@@ -24,7 +23,7 @@ export default class App extends React.Component {
       username: "",
       token: "",
       userRepos: [],
-      loginError: false,
+      loginError: true,
       currentUserPic: blankUser
     };
   }
@@ -35,18 +34,25 @@ export default class App extends React.Component {
       window.location.href.match(/\?code=(.*)/) &&
       window.location.href.match(/\?code=(.*)/)[1];
 
-    axios
-      .get("http://mramp.me/regit/server.php?code=" + code)
-      .then(function(response) {
-        app.setState({
-          token: response.data
+    if (code) {
+      console.log(code);
+      axios
+        .get("http://mramp.me/regit/server.php?code=" + code)
+        .then(function(response) {
+          app.setState({
+            token: response.data
+          });
+          console.log(app.state);
+          app.setState({
+            loginError: false
+          });
+          app.getUserInfo();
+          app.getUserRepos();
+        })
+        .catch(function(error) {
+          console.log(error);
         });
-        console.log(app.state);
-        app.getUserInfo();
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+    }
   }
 
   handleClone = e => {
@@ -90,18 +96,27 @@ export default class App extends React.Component {
     });
   };
 
-  showUser = () => {
+  refreshToken = () => {
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}&scope=repo`;
+  };
+
+  isUserLogged = () => {
+    if (this.state.token === "token doesn't exist") {
+      this.refreshToken();
+    }
+  };
+
+  getUserRepos = () => {
     if (this.state.token === "token doesn't exist") {
       this.setState({
         loginError: true
-      })
+      });
     } else {
       axios
         .get(
           `https://api.github.com/user/repos?access_token=${this.state.token}`
         )
         .then(res => {
-          console.log(res);
           this.setState({
             userRepos: res.data
           });
@@ -110,47 +125,42 @@ export default class App extends React.Component {
   };
 
   getUserInfo = () => {
-    axios
-      .get(
-        `https://api.github.com/user?access_token=${this.state.token}`
-      )
-      .then(res => {
-        this.setState({
-          currentUserPic: res.data.avatar_url
+    if (this.state.token === "token doesn't exist") {
+      this.setState({
+        loginError: true
+      });
+    } else {
+      axios
+        .get(`https://api.github.com/user?access_token=${this.state.token}`)
+        .then(res => {
+          this.setState({
+            currentUserPic: res.data.avatar_url
+          });
         });
-      })
-  }
-
-  isUserLogged = () => {};
+    }
+  };
 
   render() {
     let page = null;
-    let obj = {
-      name: "name1",
-      link: this.state.currentRepoLink,
-      path: this.state.currentFolderPath,
-      author: "author1"
-    };
-
     switch (this.state.currentPage) {
       case "clone":
         page = (
           <ClonePage
+            isUserLogged={this.isUserLogged}
             onClone={this.handleClone}
-            error={this.state.loginError}
-            showUser={this.showUser}
+            getUserRepos={this.getUserRepos}
             repos={this.state.userRepos}
           />
         );
         break;
       case "diff":
-        page = <DiffViewer />;
+        page = <DiffViewer isUserLogged={this.isUserLogged} />;
         break;
       case "visualiser":
-        page = <RepoVisualiser />;
+        page = <RepoVisualiser isUserLogged={this.isUserLogged} />;
         break;
       case "project":
-        page = <ProjectPage project={obj} />;
+        page = <ProjectPage isUserLogged={this.isUserLogged} />;
         break;
       default:
         page = <div> The page you are looking for is not here. </div>;
@@ -162,6 +172,8 @@ export default class App extends React.Component {
           func={this.handleChangePage}
           login={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}&scope=repo`}
           pic={this.state.currentUserPic}
+          currentPage={this.state.currentPage}
+          error={this.state.loginError}
         />
         {page}
       </div>

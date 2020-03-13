@@ -1,21 +1,50 @@
 @import 'imports';
 
 .sidebarButton {
+    font-weight: 500;
     display: flex;
-    justify-content: center;
+    width: 70%;
+    height: 30px;
+    justify-content: flex-start;
     align-items: center;
     background: transparent;
     text-align: left;
-    color: $WHITE;
+    color: #F1F2EB;
     border: 0;
     font-size: 1em;
     margin: 0.2em;
     padding: 0.3em;
     cursor: pointer;
     outline: none;
-    transition: all .2s ease-in-out;
+    transition: all .4s ease-in-out;
+    border-radius: 10px;
     &:hover {
-        color: white;
+        background-color: #202C39;
+    }
+    & span {
+        margin-left: 20px;
+    }
+}
+
+.sidebarButtonActive {
+    font-weight: 500;
+    color: #E3B505;
+    background-color: #202C39;
+    display: flex;
+    width: 70%;
+    height: 30px;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    border: 0;
+    font-size: 1em;
+    margin: 0.2em;
+    padding: 0.3em;
+    cursor: pointer;
+    outline: none;
+    border-radius: 10px;
+    & span {
+        margin-left: 20px;
     }
 }
 
@@ -23,20 +52,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: $BLUE;
-    color: $WHITE;
-    font-size: 1em;
-    margin: 0.2em;
-    padding: 0.3em;
-    width: 150px;
-    height: 20px;
-    border: none;
     cursor: pointer;
-    transition: all .2s ease-in-out;
-    margin-top: 15px;
+    background-color: #82D173;
+    transition: all .4s ease-in-out;
+    border-radius: 10px;
+    width: 100px;
+    height: 30px;
+    font-weight: 500;
+    color: #202C39;
     &:hover {
-        background: $DARK_BLUE;
-        color: white;
+        background-color: rgb(92, 150, 80);
     }
 }
 
@@ -44,18 +69,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: $BLUE;
-    color: $WHITE;
-    font-size: 1em;
-    margin: 0.2em;
-    padding: 0.3em;
-    width: 150px;
-    height: 20px;
-    border: none;
     cursor: pointer;
-    transition: all .2s ease-in-out;
-    opacity: 0.5;
-    margin-top: 15px;
+}
+
+.customHeader {
+    color: #F1F2EB;
 }
 
 .customInput {
@@ -87,12 +105,34 @@
     background-color: $RED;
     color: black;
     padding: 0.5em;
+    border-radius: 10px;
+    width: 80%;
+    height: 50px;
+    margin-top: 300px;
 }
 
 .repoContainer {
-    background-color: $WHITE;
-    width: 60%;
-    height: 100px;
-    margin: 0.3em;
+    background-color: #283845;
+    color: #F1F2EB;
+    width: 80%;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 60px;
+    margin: 0.2em;
     padding: 0.5em;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    & #containerButton {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    & #repoName {
+        flex: 1;
+        margin-left: 50px;
+    }
 }

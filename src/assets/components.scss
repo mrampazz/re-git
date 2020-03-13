@@ -7,8 +7,9 @@
     flex-shrink: 1;
     flex-basis: 0;
     height: 100%;
-    background-color: $BLUE;
-    justify-content: center;
+    background-color: #283845;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .page {
@@ -16,9 +17,10 @@
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    flex-grow: 3;
-    flex-shrink: 3;
+    flex-grow: 2.5;
+    flex-shrink: 2.5;
     flex-basis: 0;
+    background-color: #202C39;
 }
 
 .reposContainer {
@@ -30,21 +32,41 @@
     height: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .avatarContainer {
     border-radius: 50%;
-    width: 200px;
+    width: 75px;
+}
+
+.loginText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: #F1F2EB;
+    & a {
+        color: #F1F2EB;
+        font-size: 12px;
+        margin-top: 5px;
+    }
 }
 
 .loginContainer {
-    position: absolute;
-    top: 0;
-    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.buttonsContainer {
+    margin-top: 50px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
 }

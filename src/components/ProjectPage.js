@@ -2,6 +2,8 @@ import React from "react";
 import "../assets/components.scss";
 
 export default class ProjectPage extends React.Component {
+  componentDidMount() {
+  }
   render() {
     return (
       <>
