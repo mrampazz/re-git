@@ -1,40 +1,30 @@
-import React from 'react';
-import Button from '../ui/Button';
-import Info from '../ui/Info';
-import Input from '../ui/Input';
-import Header from '../ui/Header';
-import InputFolder from '../ui/InputFolder';
-import '../assets/components.scss';
+import React from "react";
+import Button from "./ui/Button";
+import Info from "./ui/Info";
+import Header from "./ui/Header";
+import Error from "./ui/Error";
+import Repo from "./ui/Repo";
+import "../assets/components.scss";
 export default class ClonePage extends React.Component {
-    render() {
-        return (
-            <div className="page">
-                <Header text="Clone a repo" />
-                <Info />
-                <Input 
-                    value={this.props.currentRepoLink} 
-                    onChange={this.props.onChange} 
-                />
-                <InputFolder 
-                    value={this.props.currentFolderPath}
-                    onClick={this.props.changeDirectory} 
-                />
-                <Button 
-                    name="Clone" 
-                    state={this.props.buttonState} 
-                    func={this.props.onClone}
-                />
+  render() {
+    let array = this.props.repos.map(item => (
+      <Repo id={item.id} name={item.name} />
+    ));
+    return (
+      <div className="page">
+        <Header text="Clone a repo" />
 
-                {/* <input placeholder="insert username here!!"></input> */}
-                <button onClick={this.props.showUser}>console.log stuff about user</button>
-                {
-                    this.props.isUserLogged ?
-                    <button onClick={this.props.show}>Click me to console.log projects</button>
-                    : 
-                    <p>He's not logget bruv</p>
-                }
+        <Info />
 
-            </div>
-        );
-    }
+        <Button
+          name="Show my repos"
+          state="enabled"
+          func={this.props.showUser}
+        />
+        {this.props.error ? <Error error="You are not logged in" /> : null}
+
+        <div className="reposContainer"> {array} </div>
+      </div>
+    );
+  }
 }

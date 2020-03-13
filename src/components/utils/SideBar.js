@@ -1,5 +1,6 @@
 import React from 'react';
-import SideBarButton from '../../ui/SideBarButton';
+import SideBarButton from '../ui/SideBarButton';
+import Login from '../utils/Login';
 import '../../assets/components.scss';
 export default class SideBar extends React.Component {
     render() {
@@ -16,9 +17,10 @@ export default class SideBar extends React.Component {
 
         return (
             <div className="sidebarContainer">
-                <a href={this.props.login}>
-                    Login with github  
-                </a>
+                <Login 
+                    src={this.props.pic}
+                    href={this.props.login}
+                />
                 {buttons}
             </div>
         );

@@ -35,6 +35,7 @@
     transition: all .2s ease-in-out;
     margin-top: 15px;
     &:hover {
+        background: $DARK_BLUE;
         color: white;
     }
 }
@@ -79,8 +80,19 @@
 .infoContainer {
     width: 70%;
     margin-top: 20px;
+    text-align: center;
 }
 
-.customHeader {
+.errorContainer {
+    background-color: $RED;
+    color: black;
+    padding: 0.5em;
+}
 
+.repoContainer {
+    background-color: $WHITE;
+    width: 60%;
+    height: 100px;
+    margin: 0.3em;
+    padding: 0.5em;
 }

@@ -1,8 +1,8 @@
-const { app, BrowserWindow } = require('electron');
-const ipcMain = require('electron').ipcMain;
-const isDev = require('electron-is-dev');
-const dialog = require('electron').dialog
-let server = require('../server/server');
+const { app, BrowserWindow } = require("electron");
+const ipcMain = require("electron").ipcMain;
+const isDev = require("electron-is-dev");
+const dialog = require("electron").dialog;
+let server = require("../server/server");
 let window;
 
 function createWindow() {
@@ -10,26 +10,23 @@ function createWindow() {
     width: 1024,
     height: 768,
     webPreferences: {
-      nodeIntegration: true,
-    },
-  })
+      nodeIntegration: true
+    }
+  });
 
-  // ricordate di cambiare la porta dopo localhost se necessario
   mainWindow.loadURL(
-    'http://localhost:9999'
-    // isDev
-    //   ? 'http://localhost:3000'
-    //   : 'file:///'+app.getAppPath()+'/build/index.html'
-  )
+    isDev ? "http://localhost:3000/" : "http://localhost:9999/"
+  );
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  })
-};
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
+}
 
 function selectPath(callback) {
-  let options = { properties: ['openDirectory'] };
-  dialog.showOpenDialog(options)
+  let options = { properties: ["openDirectory"] };
+  dialog
+    .showOpenDialog(options)
     .then(result => {
       console.log(result.filePaths);
       callback(result.filePaths);
@@ -39,28 +36,28 @@ function selectPath(callback) {
     });
 }
 
-ipcMain.on('clone', (event, arg) => {
-  const simpleGit = require('simple-git')(arg.path);
+ipcMain.on("clone", (event, arg) => {
+  const simpleGit = require("simple-git")(arg.path);
   simpleGit.clone(arg.link, arg.path);
   // event.reply('cloned');
 });
 
-ipcMain.on('change-directory', (event, arg) => {
-  selectPath((result) => {
+ipcMain.on("change-directory", (event, arg) => {
+  selectPath(result => {
     event.reply("folder-selected", result);
   });
 });
 
-app.on('ready', createWindow);
+app.on("ready", createWindow);
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on("activate", () => {
   if (mainWindow === null) {
-    createWindow()
+    createWindow();
   }
 });

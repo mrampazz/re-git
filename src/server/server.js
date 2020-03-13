@@ -10,10 +10,5 @@ const path = require('path');
   });
 
   application.listen(9999);
-
-//   let server = application.listen(9999, function() {
-//     console.log("express server listening on port " + server.address().port);
-//   });
-
   module.exports = application;
 })();

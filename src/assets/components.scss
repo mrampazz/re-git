@@ -20,3 +20,31 @@
     flex-shrink: 3;
     flex-basis: 0;
 }
+
+.reposContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    margin-top: 50px;
+}
+
+.avatarContainer {
+    border-radius: 50%;
+    width: 200px;
+}
+
+.loginContainer {
+    position: absolute;
+    top: 0;
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}

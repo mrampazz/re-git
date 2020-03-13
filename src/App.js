@@ -3,10 +3,13 @@ import DiffViewer from "./components/DiffViewer";
 import ClonePage from "./components/ClonePage";
 import RepoVisualiser from "./components/RepoVisualiser";
 import SideBar from "./components/utils/SideBar";
-import "./App.css";
 import ProjectPage from "./components/ProjectPage";
+import "./App.css";
 import * as axios from "axios";
+import blankUser from './assets/images/blank_user.png';
 const { ipcRenderer } = window.require("electron");
+
+
 const CLIENT_ID = "d58d36302139b6a46fef";
 const REDIRECT_URI = "http://localhost:3000/";
 
@@ -19,7 +22,10 @@ export default class App extends React.Component {
       currentFolderPath: "",
       isUserLogged: false,
       username: "",
-      token: ""
+      token: "",
+      userRepos: [],
+      loginError: false,
+      currentUserPic: blankUser
     };
   }
 
@@ -28,13 +34,15 @@ export default class App extends React.Component {
     const code =
       window.location.href.match(/\?code=(.*)/) &&
       window.location.href.match(/\?code=(.*)/)[1];
-    // give code to php & returns token
-    axios.get("http://mramp.me/regit/server.php?code=" + code)
+
+    axios
+      .get("http://mramp.me/regit/server.php?code=" + code)
       .then(function(response) {
         app.setState({
           token: response.data
-        })
+        });
         console.log(app.state);
+        app.getUserInfo();
       })
       .catch(function(error) {
         console.log(error);
@@ -83,10 +91,37 @@ export default class App extends React.Component {
   };
 
   showUser = () => {
-    axios.get("https://api.github.com/users/mrampazz/repos").then(res => {
-      console.log(res);
-    });
+    if (this.state.token === "token doesn't exist") {
+      this.setState({
+        loginError: true
+      })
+    } else {
+      axios
+        .get(
+          `https://api.github.com/user/repos?access_token=${this.state.token}`
+        )
+        .then(res => {
+          console.log(res);
+          this.setState({
+            userRepos: res.data
+          });
+        });
+    }
   };
+
+  getUserInfo = () => {
+    axios
+      .get(
+        `https://api.github.com/user?access_token=${this.state.token}`
+      )
+      .then(res => {
+        this.setState({
+          currentUserPic: res.data.avatar_url
+        });
+      })
+  }
+
+  isUserLogged = () => {};
 
   render() {
     let page = null;
@@ -101,19 +136,10 @@ export default class App extends React.Component {
       case "clone":
         page = (
           <ClonePage
-            currentRepoLink={this.state.currentRepoLink}
-            currentFolderPath={this.state.currentFolderPath}
-            onChange={this.handleChangeRepoLink}
-            buttonState={
-              this.state.currentRepoLink && this.state.currentFolderPath
-                ? "enabled"
-                : "disabled"
-            }
-            changeDirectory={this.handleChangeDirectory}
             onClone={this.handleClone}
-            isUserLogged={this.state.isUserLogged}
-            show={this.getRepos}
+            error={this.state.loginError}
             showUser={this.showUser}
+            repos={this.state.userRepos}
           />
         );
         break;
@@ -134,7 +160,8 @@ export default class App extends React.Component {
       <div className="appContainer">
         <SideBar
           func={this.handleChangePage}
-          login={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`}
+          login={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}&scope=repo`}
+          pic={this.state.currentUserPic}
         />
         {page}
       </div>
