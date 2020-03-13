@@ -7,22 +7,8 @@ import "./App.css";
 import ProjectPage from "./components/ProjectPage";
 import * as axios from "axios";
 const { ipcRenderer } = window.require("electron");
-
 const CLIENT_ID = "d58d36302139b6a46fef";
 const REDIRECT_URI = "http://localhost:3000/";
-
-// if (code) {
-//   axios.post('https://mramp.me/regit/server.php', {
-//     firstName: '',
-//     lastName: ''
-//   })
-//   .then(function (token) {
-//     console.log(token);
-//       this.setState({
-//         token: token,
-//         isUserLogged: true
-//       });
-//   });
 
 export default class App extends React.Component {
   constructor(props) {

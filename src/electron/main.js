@@ -2,6 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const ipcMain = require('electron').ipcMain;
 const isDev = require('electron-is-dev');
 const dialog = require('electron').dialog
+let server = require('../server/server');
 let window;
 
 function createWindow() {
@@ -15,9 +16,10 @@ function createWindow() {
 
   // ricordate di cambiare la porta dopo localhost se necessario
   mainWindow.loadURL(
-    isDev
-      ? 'http://localhost:3000'
-      : 'file:///'+app.getAppPath()+'/build/index.html'
+    'http://localhost:9999'
+    // isDev
+    //   ? 'http://localhost:3000'
+    //   : 'file:///'+app.getAppPath()+'/build/index.html'
   )
 
   mainWindow.on('closed', () => {
