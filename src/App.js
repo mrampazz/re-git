@@ -2,11 +2,12 @@ import React from "react";
 import DiffViewer from "./components/DiffViewer";
 import ClonePage from "./components/ClonePage";
 import RepoVisualiser from "./components/RepoVisualiser";
-import SideBar from "./components/utils/SideBar";
+import SideBar from "./components/SideBar";
 import ProjectPage from "./components/ProjectPage";
 import "./App.css";
 import * as axios from "axios";
 import blankUser from "./assets/images/blank_user.png";
+import SettingsPage from "./components/SettingsPage";
 const { ipcRenderer } = window.require("electron");
 
 const CLIENT_ID = "d58d36302139b6a46fef";
@@ -19,6 +20,7 @@ export default class App extends React.Component {
       currentPage: "clone",
       currentRepoLink: "",
       currentFolderPath: "",
+      currentUsername: '',
       isUserLogged: false,
       username: "",
       token: "",
@@ -134,7 +136,8 @@ export default class App extends React.Component {
         .get(`https://api.github.com/user?access_token=${this.state.token}`)
         .then(res => {
           this.setState({
-            currentUserPic: res.data.avatar_url
+            currentUserPic: res.data.avatar_url,
+            currentUsername: res.data.login
           });
         });
     }
@@ -162,6 +165,9 @@ export default class App extends React.Component {
       case "project":
         page = <ProjectPage isUserLogged={this.isUserLogged} />;
         break;
+      case "settings":
+        page = <SettingsPage />;
+        break;
       default:
         page = <div> The page you are looking for is not here. </div>;
         break;
@@ -172,6 +178,7 @@ export default class App extends React.Component {
           func={this.handleChangePage}
           login={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}&scope=repo`}
           pic={this.state.currentUserPic}
+          username={this.state.currentUsername}
           currentPage={this.state.currentPage}
           error={this.state.loginError}
         />

@@ -11,7 +11,7 @@ export default class ClonePage extends React.Component {
     let array = null;
     if (this.props.repos) {
       array = this.props.repos.map(item => (
-        <Repo id={item.id} name={item.name} />
+        <Repo key={item.id} id={item.id} name={item.name} />
       ));
     } else {
       array = <span>No repositories</span>
@@ -19,8 +19,6 @@ export default class ClonePage extends React.Component {
     return (
       <div className="page">
         <Header text="Clone a repo" />
-        
-
         <div className="reposContainer"> {array} </div>
       </div>
     );

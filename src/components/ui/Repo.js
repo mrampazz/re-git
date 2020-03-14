@@ -5,7 +5,7 @@ import Button from "./Button";
 export default class Repo extends React.Component {
   render() {
     return (
-      <div className="repoContainer" key={this.props.id}>
+      <div className="repoContainer">
         <div id="repoName">{this.props.name}</div>
         <Button name="clone" state="enabled" />
       </div>

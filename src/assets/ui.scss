@@ -74,24 +74,29 @@
 
 .customHeader {
     color: #F1F2EB;
+    width: 80%;
 }
 
 .customInput {
     border: 0;
-    background: $WHITE;
+    background: #283845;
     padding: 0.5em;
-    width: 68%;
+    width: 80%;
+    border-radius: 10px;
     font-size: 1em;
     margin-top: 20px;
+    color: #f1f2eb;
 }
 
 .customInputFolder {
     border: 0;
-    background: $WHITE;
+    background: #283845;
     padding: 0.5em;
-    width: 68%;
+    width: 80%;
+    border-radius: 10px;
     font-size: 1em;
     margin-top: 20px;
+    color: #f1f2eb;
     cursor: pointer;
 }
 

@@ -6,7 +6,7 @@ export default class InputFolder extends React.Component {
     return (
       <input
         className="customInputFolder"
-        placeholder="Click here to select the file path"
+        placeholder={this.props.placeHolder}
         value={this.props.value}
         onClick={this.props.onClick}
       />
