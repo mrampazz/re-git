@@ -64,9 +64,7 @@ export default class App extends React.Component {
       });
     } else {
       axios
-        .get(
-          `https://api.github.com/user/repos?access_token=${this.state.token}`
-        )
+        .get(`https://api.github.com/user/repos?access_token=${this.state.token}`)
         .then(res => {
           this.setState({
             userRepos: res.data
@@ -92,22 +90,11 @@ export default class App extends React.Component {
     }
   };
 
-  handleClone = e => {
-    ipcRenderer.send("clone", {
-      link: this.state.currentRepoLink,
-      path: this.state.currentFolderPath
-    });
-    // ipcRenderer.on('cloned', () => {
-    //   this.setState({
-    //     projectInfo: {
-    //       name: 'name1',
-    //       link: this.state.currentRepoLink,
-    //       path: this.state.currentFolderPath,
-    //       author: 'author1'
-    //     },
-    //     currentPage: 'project'
-    //   })
-    // });
+  handleClone = link => {
+    ipcRenderer.send("clone", link);
+    ipcRenderer.on("cloned", () => {
+      console.log("cloned")
+    })
   };
 
   handleChangePage = page => {
@@ -153,6 +140,7 @@ export default class App extends React.Component {
                 onClone={this.handleClone}
                 getUserRepos={this.getUserRepos}
                 repos={this.state.userRepos}
+                clone={this.handleClone}
               />
             </Route>
           </Switch>

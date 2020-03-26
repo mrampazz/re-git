@@ -10,7 +10,7 @@ export default class ClonePage extends React.Component {
     console.log(this.props.repos);
     if (this.props.repos.length !== 0) {
       array = this.props.repos.map(item => (
-        <Repo key={item.id} id={item.id} name={item.name} />
+        <Repo key={item.id} id={item.id} name={item.name} clone={() => this.props.clone(item.name)}/>
       ));
     }
 

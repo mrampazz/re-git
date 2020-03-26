@@ -37,9 +37,9 @@ function selectPath(callback) {
 }
 
 ipcMain.on("clone", (event, arg) => {
-  const simpleGit = require("simple-git")(arg.path);
-  simpleGit.clone(arg.link, arg.path);
-  // event.reply('cloned');
+  const simpleGit = require("simple-git")("src/temp");
+  simpleGit.clone(arg.link, arg.path)
+    .then(event.reply("cloned"))
 });
 
 ipcMain.on("change-directory", (event, arg) => {
