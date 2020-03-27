@@ -42,10 +42,10 @@ ipcMain.on("clone", (event, arg) => {
   let path = app.getAppPath() + "/" + arg.name;
   if (!fs.existsSync(path)){
     fs.mkdirSync(arg.name);
-    simpleGit.clone(arg.clone_url, path)
+    simpleGit.clone(arg.cloneUrl, path)
       .then(() => event.reply("cloned", arg.name));
   } else {
-    simpleGit.clone(arg.clone_url, path).then(
+    simpleGit.clone(arg.cloneUrl, path).then(
       () => event.reply("cloned")
      );
   }

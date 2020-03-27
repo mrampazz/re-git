@@ -8,161 +8,183 @@ import * as axios from "axios";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import blankUser from "./assets/images/blank_user.png";
 import SettingsPage from "./components/SettingsPage";
-import settings from './config/config';
+import settings from "./config/config";
 const { ipcRenderer } = window.require("electron");
-
 
 const CLIENT_ID = "d58d36302139b6a46fef";
 const REDIRECT_URI = "http://localhost:3000/";
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUsername: "",
-      currentUserPic: blankUser,
-      isUserLogged: false,
-      token: "",
-      userRepos: [],
-      config: settings,
-      currentlyCloning: null,
-      isCloning: false
-    };
-  }
-
-  componentDidMount() {
-    let app = this;
-    const code =
-      window.location.href.match(/\?code=(.*)/) &&
-      window.location.href.match(/\?code=(.*)/)[1];
-
-    if (code) {
-      axios
-        .get("http://mramp.me/regit/server.php?code=" + code)
-        .then(function(response) {
-          app.setState({
-            token: response.data,
-            isUserLogged: true
-          });
-
-          app.getUserInfo();
-          app.getUserRepos();
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    } else {
-      this.setState({
-        isUserLogged: false
-      })
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentUsername: "",
+            currentUserPic: blankUser,
+            isUserLogged: false,
+            token: "",
+            userRepos: [],
+            config: settings
+        };
     }
-  }
+
+    componentDidMount() {
+        let app = this;
+        const code =
+            window.location.href.match(/\?code=(.*)/) &&
+            window.location.href.match(/\?code=(.*)/)[1];
+
+        if (code) {
+            axios
+                .get("http://mramp.me/regit/server.php?code=" + code)
+                .then(function(response) {
+                    app.setState({
+                        token: response.data,
+                        isUserLogged: true
+                    });
+
+                    app.getUserInfo();
+                    app.getUserRepos();
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        } else {
+            this.setState({
+                isUserLogged: false
+            });
+        }
+    }
 
     getUserRepos = () => {
-    if (this.state.token === "token doesn't exist") {
-      this.setState({
-        isUserLogged: false
-      });
-    } else {
-      axios
-        .get(`https://api.github.com/user/repos?access_token=${this.state.token}`)
-        .then(res => {
-          this.setState({
-            userRepos: res.data
-          });
+        if (this.state.token === "token doesn't exist") {
+            this.setState({
+                isUserLogged: false
+            });
+        } else {
+            axios
+                .get(
+                    `https://api.github.com/user/repos?access_token=${this.state.token}`
+                )
+                .then(res => {
+                    let data = [];
+                    res.data.forEach(item => {
+                        data.push({
+                            id: item.id,
+                            name: item.name,
+                            cloneUrl: item.clone_url,
+                            isPrivate: item.private,
+                            isCloned: false,
+                            isCloning: false
+                        });
+                    });
+
+                    this.setState({
+                        userRepos: data
+                    });
+
+                    console.log(data);
+                });
+        }
+    };
+
+    getUserInfo = () => {
+        if (this.state.token === "token doesn't exist") {
+            this.setState({
+                isUserLogged: false
+            });
+        } else {
+            axios
+                .get(
+                    `https://api.github.com/user?access_token=${this.state.token}`
+                )
+                .then(res => {
+                    this.setState({
+                        currentUserPic: res.data.avatar_url,
+                        currentUsername: res.data.login
+                    });
+                });
+        }
+    };
+
+    handleClone = obj => {
+      console.log(obj);
+        let app = this;
+        let repos = this.state.userRepos;
+        let item = repos.find(item => item.name === obj.name);
+        item.isCloning = true;
+        item.isCloned = false;
+        this.setState({
+            userRepos: repos
         });
-    }
-  };
-
-  getUserInfo = () => {
-    if (this.state.token === "token doesn't exist") {
-      this.setState({
-        isUserLogged: false
-      });
-    } else {
-      axios
-        .get(`https://api.github.com/user?access_token=${this.state.token}`)
-        .then(res => {
-          this.setState({
-            currentUserPic: res.data.avatar_url,
-            currentUsername: res.data.login
-          });
+        ipcRenderer.send("clone", obj);
+        ipcRenderer.on("cloned", () => {
+            let repos = this.state.userRepos;
+            let item = repos.find(item => item.name === obj.name);
+            item.isCloning = false;
+            item.isCloned = true;
+            console.log(repos);
+            app.setState({
+                userRepos: repos
+            });
         });
+    };
+
+    handleChangePage = page => {
+        this.setState({
+            currentPage: page
+        });
+    };
+
+    handleChangeRepoLink = e => {
+        this.setState({
+            currentRepoLink: e.target.value
+        });
+    };
+
+    handleChangeDirectory = e => {
+        e.preventDefault();
+        ipcRenderer.send("change-directory");
+        ipcRenderer.on("folder-selected", (event, arg) => {
+            this.setState({
+                currentFolderPath: arg[0]
+            });
+            console.log(this.state);
+        });
+    };
+
+    isRepoClone = name => {
+        ipcRenderer.send("is-repo-cloned", name);
+        ipcRenderer.on("is-cloned-reply", () => {
+            // returns a boolean
+        });
+    };
+
+    render() {
+        return (
+            <div className="appContainer">
+                <HashRouter>
+                    <SideBar
+                        func={this.handleChangePage}
+                        login={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}&scope=repo`}
+                        pic={this.state.currentUserPic}
+                        username={this.state.currentUsername}
+                        error={this.state.isUserLogged}
+                    />
+                    <Switch>
+                        <Route path="/diff" component={DiffViewer} />
+                        <Route path="/project" component={ProjectPage} />
+                        <Route path="/settings" component={SettingsPage} />
+                        <Route path="/" exact component={ClonePage}>
+                            <ClonePage
+                                onClone={this.handleClone}
+                                getUserRepos={this.getUserRepos}
+                                repos={this.state.userRepos}
+                                clone={this.handleClone}
+                            />
+                        </Route>
+                    </Switch>
+                </HashRouter>
+            </div>
+        );
     }
-  };
-
-  handleClone = obj => {
-    let app = this;
-    this.setState({
-      currentlyCloning: obj.name,
-      isCloning: true
-    })
-    ipcRenderer.send("clone", obj);
-    ipcRenderer.on("cloned", () => {
-      app.setState({
-        currentlyCloning: null,
-        isCloning: false
-      })
-    })
-  };
-
-  handleChangePage = page => {
-    this.setState({
-      currentPage: page
-    });
-  };
-
-  handleChangeRepoLink = e => {
-    this.setState({
-      currentRepoLink: e.target.value
-    });
-  };
-
-  handleChangeDirectory = e => {
-    e.preventDefault();
-    ipcRenderer.send("change-directory");
-    ipcRenderer.on("folder-selected", (event, arg) => {
-      this.setState({
-        currentFolderPath: arg[0]
-      });
-      console.log(this.state);
-    });
-  };
-
-  isRepoClone = (name) => {
-    ipcRenderer.send("is-repo-cloned", name);
-    ipcRenderer.on("is-cloned-reply", () => {
-      // returns a boolean
-    })
-  }
-
-  render() {
-    return (
-      <div className="appContainer">
-        <HashRouter>
-          <SideBar
-            func={this.handleChangePage}
-            login={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}&scope=repo`}
-            pic={this.state.currentUserPic}
-            username={this.state.currentUsername}
-            error={this.state.isUserLogged}
-          />
-          <Switch>
-            <Route path="/diff" component={DiffViewer} />
-            <Route path="/project" component={ProjectPage} />
-            <Route path="/settings" component={SettingsPage} />
-            <Route path="/" exact component={ClonePage}>
-              <ClonePage
-                onClone={this.handleClone}
-                getUserRepos={this.getUserRepos}
-                repos={this.state.userRepos}
-                clone={this.handleClone}
-                currentlyCloning={this.state.currentlyCloning}
-              />
-            </Route>
-          </Switch>
-        </HashRouter>
-      </div>
-    );
-  }
 }

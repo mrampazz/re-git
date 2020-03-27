@@ -6,21 +6,24 @@ import SearchBar from "./ui/SearchBar";
 export default class ClonePage extends React.Component {
     render() {
         let array = null;
-        console.log(this.props.repos);
         if (this.props.repos.length !== 0) {
             array = this.props.repos.map(item => (
                 <Repo
-                    cssClass={
-                        this.props.currentlyCloning === item.name
+                    cssClassCloning={
+                        item.isCloning
                             ? "cloning"
                             : ""
                     }
+                    cssClassCloned={
+                        item.isCloned
+                            ? "cloned"
+                            : ""
+                    }
                     key={item.id}
-                    id={item.id}
                     name={item.name}
                     clone={() =>
                         this.props.clone({
-                            clone_url: item.clone_url,
+                            cloneUrl: item.cloneUrl,
                             name: item.name
                         })
                     }
