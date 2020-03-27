@@ -2,9 +2,10 @@ const { app, BrowserWindow } = require("electron");
 const ipcMain = require("electron").ipcMain;
 const isDev = require("electron-is-dev");
 const dialog = require("electron").dialog;
+const fs = require('fs');
 let server = require("../server/server");
 let window;
-
+console.log(app.getAppPath() + "/src/temp/"+"flixy");
 function createWindow() {
   var mainWindow = new BrowserWindow({
     width: 1024,
@@ -37,9 +38,18 @@ function selectPath(callback) {
 }
 
 ipcMain.on("clone", (event, arg) => {
-  const simpleGit = require("simple-git")("src/temp");
-  simpleGit.clone(arg.link, arg.path)
-    .then(event.reply("cloned"))
+  const simpleGit = require("simple-git/promise")();
+  let path = app.getAppPath() + "/" + arg.name;
+  if (!fs.existsSync(path)){
+    fs.mkdirSync(arg.name);
+    simpleGit.clone(arg.clone_url, path)
+      .then(() => event.reply("cloned", arg.name));
+  } else {
+    simpleGit.clone(arg.clone_url, path).then(
+      () => event.reply("cloned")
+     );
+  }
+  
 });
 
 ipcMain.on("change-directory", (event, arg) => {

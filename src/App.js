@@ -24,12 +24,13 @@ export default class App extends React.Component {
       isUserLogged: false,
       token: "",
       userRepos: [],
-      config: settings
+      config: settings,
+      currentlyCloning: null,
+      isCloning: false
     };
   }
 
   componentDidMount() {
-    // insert function to check if user is authenticated
     let app = this;
     const code =
       window.location.href.match(/\?code=(.*)/) &&
@@ -90,10 +91,18 @@ export default class App extends React.Component {
     }
   };
 
-  handleClone = link => {
-    ipcRenderer.send("clone", link);
+  handleClone = obj => {
+    let app = this;
+    this.setState({
+      currentlyCloning: obj.name,
+      isCloning: true
+    })
+    ipcRenderer.send("clone", obj);
     ipcRenderer.on("cloned", () => {
-      console.log("cloned")
+      app.setState({
+        currentlyCloning: null,
+        isCloning: false
+      })
     })
   };
 
@@ -120,6 +129,13 @@ export default class App extends React.Component {
     });
   };
 
+  isRepoClone = (name) => {
+    ipcRenderer.send("is-repo-cloned", name);
+    ipcRenderer.on("is-cloned-reply", () => {
+      // returns a boolean
+    })
+  }
+
   render() {
     return (
       <div className="appContainer">
@@ -141,6 +157,7 @@ export default class App extends React.Component {
                 getUserRepos={this.getUserRepos}
                 repos={this.state.userRepos}
                 clone={this.handleClone}
+                currentlyCloning={this.state.currentlyCloning}
               />
             </Route>
           </Switch>
