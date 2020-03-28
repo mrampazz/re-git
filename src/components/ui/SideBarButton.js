@@ -5,14 +5,17 @@ import "../../assets/ui.scss";
 export default class SideBarButton extends React.Component {
   render() {
     return (
-      <NavLink
-        exact
-        className="sidebarButton"
-        activeClassName="sidebarButtonActive"
-        to={this.props.path}
-      >
-        {this.props.name}
-      </NavLink>
+      <div className="sidebarButtonContainer">
+        <NavLink
+          exact
+          className="sidebarButton"
+          activeClassName="sidebarButtonActive"
+          to={this.props.path}
+        >
+          <div className="selector" />
+          <span>{this.props.name}</span>
+        </NavLink>
+      </div>
     );
   }
 }

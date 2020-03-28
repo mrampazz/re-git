@@ -37,7 +37,6 @@
     "simple-git": "^1.131.0"
   },
   "scripts": {
-    "startApp": "npm run start && npm run electron",
     "electron": "electron .",
     "start": "react-scripts start",
     "build": "react-scripts build",

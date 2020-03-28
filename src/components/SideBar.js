@@ -5,10 +5,9 @@ import Error from "./ui/Error";
 import "../assets/components.scss";
 
 let buttonList = [
-  { name: "Clone a repo", path: "/" },
-  { name: "View diff", path: "/diff" },
-  { name: "Project page", path: "/project" },
-  { name: "Settings", path: "/settings" }
+  { name: "PROJECT", path: "/" },
+  { name: "DIFF", path: "/diff" },
+  { name: "SETTINGS", path: "/settings" }
 ];
 
 export default class SideBar extends React.Component {

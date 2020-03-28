@@ -172,15 +172,15 @@ export default class App extends React.Component {
                     />
                     <Switch>
                         <Route path="/diff" component={DiffViewer} />
-                        <Route path="/project" component={ProjectPage} />
                         <Route path="/settings" component={SettingsPage} />
                         <Route path="/" exact component={ClonePage}>
-                            <ClonePage
+                            {/* <ClonePage
                                 onClone={this.handleClone}
                                 getUserRepos={this.getUserRepos}
                                 repos={this.state.userRepos}
                                 clone={this.handleClone}
-                            />
+                            /> */}
+                            <ProjectPage />
                         </Route>
                     </Switch>
                 </HashRouter>
