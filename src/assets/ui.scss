@@ -165,39 +165,180 @@
 
 
 .frameContainer {
+    -webkit-app-region: drag;
     display: flex;
     flex-direction: row;
     width: 100%;
+    z-index: 100;
     height: 32px;
     background-color: #F9F9F9;
-    -webkit-box-shadow: 0px 1px 4px 0px rgba(71,68,72,1);
-    -moz-box-shadow: 0px 1px 4px 0px rgba(71,68,72,1);
-    box-shadow: 0px 1px 4px 0px rgba(71,68,72,1);
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(71,68,72,0.5);
+    -moz-box-shadow: 0px 1px 4px 0px rgba(71,68,72,0.5);
+    box-shadow: 0px 1px 4px 0px rgba(71,68,72,0.5);
     & div {
         flex: 1;
     }
 }
 
 
+.frameMenus {
+    -webkit-app-region: no-drag;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    & div {
+        display: flex;
+        box-shadow: 1px 0px 1px 0px rgba(71,68,72,0.5);
+        width: 138px;
+        height: 32px;
+        flex-basis: 138px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        justify-content: space-evenly;
+        align-items: center;
+        font-size: 18px;
+    }
+}
+
 .frameButtons {
+    -webkit-app-region: drag;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    
+    
+    & div:nth-child(1) {
+        background-color: #EEC643;
+        &:hover {
+            background-color: rgb(246, 219, 131);
+        }
+    }
+    & div:nth-child(2) {
+        background-color: #82D173;
+        &:hover {
+            background-color: rgb(183, 231, 173);
+        }
+    }
+    & div:nth-child(3) {
+        background-color: #FE4A49;
+        &:hover {
+            background-color: rgb(255, 124, 124);
+        }
+    }
+
     & div {
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 42px;
         height: 32px;
-        flex-basis: 32px;
+        flex-basis: 42px;
         flex-grow: 0;
         flex-shrink: 0;
+        transition: all 0.2s ease-in-out;
+        -webkit-app-region: no-drag;
     }
-    & :nth-child(1) {
-        background-color: #EEC643;
+}
+
+.modalBG {
+    background-color: rgba(71,68,72,0.5);
+    width: 100vw;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
+
+#menuClone {
+    position: absolute;
+    top: 32px;
+    left: 224px;
+    width: 200px;
+    height: auto;
+    background-color: #F9F9F9;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+
+    & div {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 14px;
+        transition: all .2s ease-in-out;
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: 24px;
+        width: 100%;
+        cursor: default;
+        & span {
+            margin-left: 28px;
+        }
+        &:hover {
+            background-color: #0F8AE5;
+        }
     }
-    & :nth-child(2) {
-        background-color: #82D173;
+}
+
+#menuOpen {
+    position: absolute;
+    top: 32px;
+    left: 362px;
+    width: 200px;
+    height: auto;
+    background-color: #F9F9F9;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+
+    & div {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 14px;
+        transition: all .2s ease-in-out;
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: 24px;
+        width: 100%;
+        cursor: default;
+        & span {
+            margin-left: 28px;
+        }
+        &:hover {
+            background-color: #0F8AE5;
+        }
     }
-    & :nth-child(3) {
-        background-color: #FE4A49;
+}
+
+#menuBranch {
+    position: absolute;
+    top: 32px;
+    left: 500px;
+    width: 200px;
+    height: auto;
+    background-color: #F9F9F9;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+
+    & div {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 14px;
+        transition: all .2s ease-in-out;
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: 24px;
+        width: 100%;
+        cursor: default;
+        & span {
+            margin-left: 28px;
+        }
+        &:hover {
+            background-color: #0F8AE5;
+        }
     }
 }
