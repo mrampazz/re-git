@@ -120,13 +120,15 @@
 }
 
 .errorContainer {
-    background-color: $RED;
+    -webkit-app-region: no-drag;
+    background-color: #FE4A49;
     color: black;
     padding: 0.5em;
     border-radius: 10px;
     width: 80%;
     height: 50px;
-    margin-top: 300px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .repoContainer {
@@ -170,7 +172,7 @@
     flex-direction: row;
     width: 100%;
     z-index: 100;
-    height: 32px;
+    height: 36px;
     background-color: #F9F9F9;
     -webkit-box-shadow: 0px 1px 4px 0px rgba(71,68,72,0.5);
     -moz-box-shadow: 0px 1px 4px 0px rgba(71,68,72,0.5);
@@ -182,15 +184,16 @@
 
 
 .frameMenus {
-    -webkit-app-region: no-drag;
+    -webkit-app-region: drag;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     & div {
+        -webkit-app-region: no-drag;
         display: flex;
         box-shadow: 1px 0px 1px 0px rgba(71,68,72,0.5);
         width: 138px;
-        height: 32px;
+        height: 36px;
         flex-basis: 138px;
         flex-grow: 0;
         flex-shrink: 0;
@@ -231,7 +234,7 @@
         justify-content: center;
         align-items: center;
         width: 42px;
-        height: 32px;
+        height: 36px;
         flex-basis: 42px;
         flex-grow: 0;
         flex-shrink: 0;
@@ -252,7 +255,7 @@
 
 #menuClone {
     position: absolute;
-    top: 32px;
+    top: 36px;
     left: 224px;
     width: 200px;
     height: auto;
@@ -269,7 +272,7 @@
         transition: all .2s ease-in-out;
         flex-grow: 0;
         flex-shrink: 0;
-        flex-basis: 24px;
+        flex-basis: 36px;
         width: 100%;
         cursor: default;
         & span {
@@ -283,7 +286,7 @@
 
 #menuOpen {
     position: absolute;
-    top: 32px;
+    top: 36px;
     left: 362px;
     width: 200px;
     height: auto;
@@ -300,7 +303,7 @@
         transition: all .2s ease-in-out;
         flex-grow: 0;
         flex-shrink: 0;
-        flex-basis: 24px;
+        flex-basis: 36px;
         width: 100%;
         cursor: default;
         & span {
@@ -314,7 +317,7 @@
 
 #menuBranch {
     position: absolute;
-    top: 32px;
+    top: 36px;
     left: 500px;
     width: 200px;
     height: auto;
@@ -331,7 +334,7 @@
         transition: all .2s ease-in-out;
         flex-grow: 0;
         flex-shrink: 0;
-        flex-basis: 24px;
+        flex-basis: 36px;
         width: 100%;
         cursor: default;
         & span {

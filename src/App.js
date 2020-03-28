@@ -23,7 +23,8 @@ export default class App extends React.Component {
             isUserLogged: false,
             token: "",
             userRepos: [],
-            config: settings
+            config: settings,
+            currentRepo: null
         };
     }
 
@@ -168,19 +169,21 @@ export default class App extends React.Component {
                         login={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}&scope=repo`}
                         pic={this.state.currentUserPic}
                         username={this.state.currentUsername}
-                        error={this.state.isUserLogged}
+                        loginError={this.state.isUserLogged}
+                        noCloningFolder={this.state.config.cloningFolder === '' ? false : true}
                     />
                     <Switch>
-                        <Route path="/diff" component={DiffViewer} />
-                        <Route path="/settings" component={SettingsPage} />
-                        <Route path="/" exact component={ClonePage}>
-                            {/* <ClonePage
-                                onClone={this.handleClone}
-                                getUserRepos={this.getUserRepos}
-                                repos={this.state.userRepos}
-                                clone={this.handleClone}
-                            /> */}
-                            <ProjectPage />
+                        <Route path="/diff">
+                            <DiffViewer />
+                        </Route>
+                        <Route path="/settings">
+                            <SettingsPage />
+                        </Route>
+                        <Route path="/" exact>
+                            <ProjectPage 
+                                token={this.state.token}
+                                currentRepo={this.state.currentRepo}
+                            />
                         </Route>
                     </Switch>
                 </HashRouter>

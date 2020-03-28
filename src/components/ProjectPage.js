@@ -3,8 +3,6 @@ import "../assets/components.scss";
 import Frame from "./ui/Frame";
 
 export default class ProjectPage extends React.Component {
-  componentDidMount() {
-  }
   render() {
     return (
       <>

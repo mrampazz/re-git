@@ -9,7 +9,7 @@ console.log(app.getAppPath() + "/src/temp/"+"flixy");
 function createWindow() {
   var mainWindow = new BrowserWindow({
     width: 1024,
-    height: 768,
+    height: 548,
     webPreferences: {
       nodeIntegration: true
     },

@@ -24,7 +24,10 @@ export default class SideBar extends React.Component {
       <div className="sidebarContainer">
         <Login src={this.props.pic} href={this.props.login} username={this.props.username} />
         <div className="buttonsContainer">{buttons}</div>
-        {!this.props.error ? <Error error="You are not logged in" /> : null}
+        <div className="errorsContainer">
+          {!this.props.loginError ? <Error error="You are not logged in" /> : null}
+          {!this.props.noCloningFolder ? <Error error="You have to setup a cloning folder first" /> : null}
+        </div>
       </div>
     );
   }

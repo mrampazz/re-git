@@ -5,11 +5,13 @@ import Input from "./ui/Input";
 import InputFolder from "./ui/InputFolder";
 import SubHeader from "./ui/SubHeader";
 import Button from "./ui/Button";
+import Frame from "./ui/Frame";
 export default class SettingsPage extends React.Component {
   componentDidMount() {}
   render() {
     return (
       <div className="page">
+        <Frame />
         <Header text="Settings" />
         <SubHeader text="Manual cloning" />
         <Input />
