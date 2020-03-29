@@ -42,6 +42,7 @@ export default class CloneModal extends React.Component {
             this.setState({
                 canClone: true
             })
+            console.log(this.state)
         })
     }
     

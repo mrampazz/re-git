@@ -205,7 +205,7 @@ export default class App extends React.Component {
                                 closeCloningModal={this.closeCloningModal}
                                 repos={this.state.userRepos}
                             />
-                            {this.state.isCloningModalOpen ? <CloneModal repos={this.state.userRepos} close={this.closeCloningModal} /> : null}
+                            {this.state.isCloningModalOpen ? <CloneModal clone={this.handleClone} repos={this.state.userRepos} close={this.closeCloningModal} /> : null}
                         </Route>
                     </Switch>
                 </HashRouter>

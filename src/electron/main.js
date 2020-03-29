@@ -5,7 +5,6 @@ const dialog = require("electron").dialog;
 const fs = require('fs');
 let server = require("../server/server");
 let window;
-console.log(app.getAppPath() + "/src/temp/"+"flixy");
 function createWindow() {
   var mainWindow = new BrowserWindow({
     width: 1024,
@@ -23,6 +22,10 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+
+  const ses = mainWindow.webContents.session;
+  ses.clearAuthCache();
+  ses.clearStorageData();
 }
 
 function selectPath(callback) {
