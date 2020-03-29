@@ -36,13 +36,12 @@ export default class CloneModal extends React.Component {
     selectRepo = (name, link) => {
         this.setState({
             selectedRepoName: name,
-            selectedRepoLink: link
+            selectedRepoLink: link,
+            canClone: false
         }, () => {
             this.setState({
                 canClone: true
             })
-            console.log(this.state)
-            this.forceUpdate();
         })
     }
     
@@ -59,7 +58,7 @@ export default class CloneModal extends React.Component {
         if (this.props.repos) {
             array = this.props.repos.map(item => (
                 <div key={item.id} className={this.state.selectedRepoName === item.name ? "selectedRepo repoItem" : "repoItem"}  onClick={() => this.selectRepo(item.name, item.cloneUrl)}>
-                    {item.name}
+                    <span>{item.name}</span>
                 </div>
             ));
         }
@@ -68,10 +67,16 @@ export default class CloneModal extends React.Component {
                 <div className="cloneModalContainer">
                 {
                     this.state.tab === "repos" ? 
-                    <div>
-                        {array}
-                        <Button state={this.state.canClone ? "enabled" : "disabled"} name="Clone" func={() => this.props.clone({ cloneUrl: this.state.selectedRepoLink, name: this.state.selectedRepoName })} />
-                    </div>
+                    <>
+                        <h3>Your repositories:</h3>
+                        <div className="modalRepoContainer">
+                            {array}
+                        </div>
+                        <Button 
+                            state={this.state.canClone ? "enabled" : "disabled"} 
+                            name="Clone" 
+                            func={() => this.props.clone({ cloneUrl: this.state.selectedRepoLink, name: this.state.selectedRepoName })} />
+                    </>
                     :
                     <div>
                         <input value={this.state.link} onChange={this.handleChange} />

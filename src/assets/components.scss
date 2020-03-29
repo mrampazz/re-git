@@ -2,17 +2,19 @@
 
 /* Scrollbar Styling */
 ::-webkit-scrollbar {     
-    background-color: #202c39;
-    width: .8em
+    background-color: #F9F9F9;
+    width: 5px;
+    border: 1px solid rgba(71,68,72,0.5);
 }
 
 ::-webkit-scrollbar-thumb:window-inactive,
 ::-webkit-scrollbar-thumb {
-    background:  #283845;
+    background:  #474448;
+    height: 10px;
     border-radius: 10px;
     transition: all .4s ease-in-out;
     &:hover {
-        background:  #324250;
+      background:  #474448;
     }
 }
 .sidebarContainer {
