@@ -22,6 +22,7 @@ export default class Frame extends React.Component {
         this.handleCloseBranchMenu();
         this.handleCloseOpenMenu();
         this.handleCloseCloneMenu();
+        this.props.closeCloningModal();
     };
 
     handleOpenCloneMenu = () => {
@@ -101,8 +102,8 @@ export default class Frame extends React.Component {
                             <img src={iconDownArrow} width={10} height={10} />
                             {this.state.cloneMenuOpen ? (
                                 <div id="menuClone">
-                                    <div><span>Clone from GitHub</span></div>
-                                    <div><span>Clone from link</span></div>
+                                    <div onClick={this.props.openCloningModal}><span>Clone from GitHub</span></div>
+                                    <div onClick={this.props.openCloningModal}><span>Clone from link</span></div>
                                 </div>
                             ) : null}
                         </div>

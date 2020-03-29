@@ -9,6 +9,7 @@ import { HashRouter, Route, Switch } from "react-router-dom";
 import blankUser from "./assets/images/blank_user.png";
 import SettingsPage from "./components/SettingsPage";
 import settings from "./config/config";
+import CloneModal from "./components/ui/CloneModal";
 const { ipcRenderer } = window.require("electron");
 
 const CLIENT_ID = "d58d36302139b6a46fef";
@@ -24,7 +25,10 @@ export default class App extends React.Component {
             token: "",
             userRepos: [],
             config: settings,
-            currentRepo: null
+            currentRepo: null,
+            isCloningModalOpen: false,
+            isOpenModalOpen: false,
+            isBranchModalOpen: false,
         };
     }
 
@@ -160,6 +164,20 @@ export default class App extends React.Component {
         });
     };
 
+    openCloningModal = () => {
+        this.setState({
+            isCloningModalOpen: true,
+            isOpenModalOpen: false,
+            isBranchModalOpen: false
+        })
+    }
+
+    closeCloningModal = () => {
+        this.setState({
+            isCloningModalOpen: false
+        })
+    }
+
     render() {
         return (
             <div className="appContainer">
@@ -183,7 +201,11 @@ export default class App extends React.Component {
                             <ProjectPage 
                                 token={this.state.token}
                                 currentRepo={this.state.currentRepo}
+                                openCloningModal={this.openCloningModal}
+                                closeCloningModal={this.closeCloningModal}
+                                repos={this.state.userRepos}
                             />
+                            {this.state.isCloningModalOpen ? <CloneModal repos={this.state.userRepos} close={this.closeCloningModal} /> : null}
                         </Route>
                     </Switch>
                 </HashRouter>

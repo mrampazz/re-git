@@ -345,3 +345,38 @@
         }
     }
 }
+
+.modalContainer {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.cloneModalContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 624px;
+    height: 412px;
+    background-color: #F9F9F9;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+
+.repoItem {
+    width: 400px;
+    font-size: 14px;
+    height: 24px;
+    background-color: #f9f9f9;
+    -webkit-box-shadow: 1px 1px 1px 0px rgba(71,68,72,0.5);
+    -moz-box-shadow: 1px 1px 1px 0px rgba(71,68,72,0.5);
+    box-shadow: 1px 1px 1px 0px rgba(71,68,72,0.5);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.selectedRepo {
+    background-color: #0F8AE5;
+}
