@@ -8,11 +8,10 @@ let window;
 function createWindow() {
   var mainWindow = new BrowserWindow({
     width: 1024,
-    height: 548,
+    height: 768,
     webPreferences: {
       nodeIntegration: true
     },
-    frame: false
   });
 
   mainWindow.loadURL(

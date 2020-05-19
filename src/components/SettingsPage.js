@@ -1,7 +1,7 @@
 import React from "react";
 import "../assets/components.scss";
 import Header from "./ui/Header";
-import Input from "./ui/Input";
+import Input from "./ui/Ui";
 import InputFolder from "./ui/InputFolder";
 import SubHeader from "./ui/SubHeader";
 import Button from "./ui/Button";
