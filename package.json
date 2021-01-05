@@ -22,7 +22,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.3",
     "chartjs-plugin-annotation": "^0.5.7",
     "electron-is-dev": "^1.1.0",
